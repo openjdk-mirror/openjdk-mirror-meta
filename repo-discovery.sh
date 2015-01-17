@@ -5,15 +5,8 @@
 
 # It's polite not to look when another person uses bash.
 
-PROJECTS=( `curl -s http://hg.openjdk.java.net/ | grep '<td>' | grep -P -o '(?<=>)\w+(?=<)'` )
-
-for PROJECT in "${PROJECTS[@]}"
-do
-    :
-    REPOS=( `curl -s http://hg.openjdk.java.net/$PROJECT | grep '<td>' | grep -P -o '(?<=href=")[^"]*(?=")'` )
-    for REPO in "${REPOS[@]}"
-    do
-        :
-        echo "$REPO"
-    done
-done
+while read -r PROJECT; do
+    while read -r REPO; do
+        echo "$PROJECT$REPO"
+    done < <(curl -s http://hg.openjdk.java.net/$PROJECT | awk -F\" '/<td><a href=/ { print $2 }')
+done < <(curl -s http://hg.openjdk.java.net/ | awk -F\" '/<td>/ { print $2 }')
