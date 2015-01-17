@@ -7,6 +7,6 @@
 
 while read -r PROJECT; do
     while read -r REPO; do
-        echo "$PROJECT$REPO"
+        echo "/$PROJECT$REPO"
     done < <(curl -s http://hg.openjdk.java.net/$PROJECT | awk -F\" '/<td><a href=/ { print $2 }')
 done < <(curl -s http://hg.openjdk.java.net/ | awk -F\" '/<td>/ { print $2 }')
